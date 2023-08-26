@@ -95,6 +95,10 @@ def encoder_helper(df, category_lst, response):
     output:
             df: pandas dataframe with new columns for
     '''
+
+    # creating "Churn" feature using Attrition flag
+    df['Churn'] = df['Attrition_Flag'].apply(lambda val: 0 if val == "Existing Customer" else 1)
+
     for category in category_lst:
         values_lst = []
         groups = df.groupby(category).mean()['Churn']
