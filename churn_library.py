@@ -56,7 +56,7 @@ def perform_eda(df, image_fig_dir = PATH_IMAGE_EDA):
     plt.ylabel('Count')
     plt.title('Histogram of Customer Age')
     plt.tight_layout()
-    pth_histogram_age = os.path.join(image_fig_dir, 'Customer_Age_Histrogram.png')
+    pth_histogram_age = os.path.join(image_fig_dir, 'Customer_Age_Histogram.png')
     plt.savefig(pth_histogram_age)
     plt.close()
     # Figure: Histogram of Gender
