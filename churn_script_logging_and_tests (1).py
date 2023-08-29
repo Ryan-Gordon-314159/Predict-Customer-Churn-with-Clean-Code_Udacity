@@ -81,7 +81,7 @@ def remove_all_files(directory):
 
 @pytest.fixture(scope='module')
 
-def df():
+def load_data():
     '''
     The DataFrame object fixture to use in test functions
     '''
@@ -108,54 +108,54 @@ def test_import():
         raise err
 
 
-def test_eda(df):
+def test_eda(load_data):
     '''
     test perform eda function
     '''
     image_dir_eda = './test_images/eda/'
     remove_all_files(image_dir_eda)
-    cls.perform_eda(df, image_fig_dir = image_dir_eda)
+    cls.perform_eda(load_data, image_fig_dir = image_dir_eda)
     assert_true(os.path.isfile("./test_images/eda/Customer_Age_Histogram.png"),
                 "Age histogram plot created.",
                 "Age histogram plot not created.")
 
 
-def test_encoder_helper(df):
+def test_encoder_helper(load_data):
     '''
     test encoder helper
     '''
     response = 'Churn'
     category_lst = ['Gender']
-    df = cls.encoder_helper(df, category_lst, response)
+    df = cls.encoder_helper(load_data, category_lst, response)
     assert_true('Gender_Churn' in df.columns, "Gender_Churn column exists.", "Gender_Churn column does not exist.")
 
 
-def test_perform_feature_engineering():
+def test_perform_feature_engineering(load_data):
     '''
     test perform_feature_engineering
     '''
     response = 'Churn'
-    X_train, X_test, y_train, y_test = cls.perform_feature_engineering(df, response, test_size=0.4)
-    assert_equal(len(X_train), round(len(df) * (1-test_size)),
+    X_train, X_test, y_train, y_test = cls.perform_feature_engineering(load_data, response, test_size=0.4)
+    assert_equal(len(X_train), round(len(load_data) * (1-test_size)),
                 "X_train has the correct number of rows.",
                 "X_train does not have the correct number of rows.")
-    assert_equal(len(X_test), round(len(df) * test_size),
+    assert_equal(len(X_test), round(len(load_data) * test_size),
                 "X_test has the correct number of rows.",
                 "X_test does not have the correct number of rows.")
-    assert_equal(len(y_train), round(len(df) * (1-test_size)),
+    assert_equal(len(y_train), round(len(load_data) * (1-test_size)),
                 "y_train has the correct number of rows.",
                 "y_train does not have the correct number of rows.")
-    assert_equal(len(y_test), round(len(df) * test_size),
+    assert_equal(len(y_test), round(len(load_data) * test_size),
                 "y_test has the correct number of rows.",
                 "y_test does not have the correct number of rows.")
 
 
-def test_train_models():
+def test_train_models(load_data):
     '''
     test train_models
     '''
     response = 'Churn'
-    X_train, X_test, y_train, y_test = cls.perform_feature_engineering(df, response, test_size = 0.4)
+    X_train, X_test, y_train, y_test = cls.perform_feature_engineering(load_data, response, test_size = 0.4)
     
     # Paths to directories for testing figure and model creation
     test_image_dir = 'test_images/results/'
